@@ -1,0 +1,253 @@
+//
+//  ViewController.swift
+//  Login
+//
+//  Created by HA on 2023/01/11.
+//
+
+import UIKit
+import SnapKit
+import SwiftUI
+
+
+class ViewController: UIViewController {
+
+    //MARK: - Properties
+    
+    private lazy var loginLabel: UILabel = {
+        
+        let label = UILabel()
+        label.text = "이메일주소 또는 전화번호"
+        label.textColor = .lightGray
+        label.font = UIFont(name: "Kefa-Regular", size: 20)
+        
+        return label
+    }()
+    
+    private lazy var passwordLabel: UILabel = {
+        
+        let label = UILabel()
+        label.text = "비밀번호"
+        label.textColor = .lightGray
+        label.font = UIFont(name: "Kefa-Regular", size: 20)
+        
+        
+        return label
+    }()
+    
+    lazy var emailTextField: UITextField = {
+        let tf = UITextField()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(emailTap(_:)))
+                tf.addGestureRecognizer(tapGesture)
+                tf.isUserInteractionEnabled = true
+        
+        return tf
+        
+    }()
+    
+    
+    lazy var passwordTextField: UITextField = {
+        let tf = UITextField()
+        tf.isSecureTextEntry = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(passwordTap(_:)))
+                tf.addGestureRecognizer(tapGesture)
+                tf.isUserInteractionEnabled = true
+        
+        return tf
+    }()
+    
+    private lazy var emailView: UIView = { // email
+       
+        let view = UIView()
+        view.backgroundColor = .darkGray
+        view.layer.cornerRadius = 5
+        view.layer.borderWidth = 1
+       
+        
+        return view
+    }()
+    
+    @objc
+    func emailTap(_ gesture: UITapGestureRecognizer) {
+        loginLabel.font = .systemFont(ofSize: 11.0)
+        loginLabel.textColor = .white
+        emailView.backgroundColor = .gray
+        view.addSubview(loginLabel)
+        loginLabel.snp.makeConstraints {
+            
+            $0.bottom.equalToSuperview().inset(525)
+            $0.leading.equalToSuperview().inset(40)
+            
+        }
+    }
+    
+    @objc
+    func passwordTap(_ gesture: UITapGestureRecognizer) {
+        passwordLabel.font = .systemFont(ofSize: 11.0)
+        passwordLabel.textColor = .white
+        passwordView.backgroundColor = .gray
+        view.addSubview(passwordLabel)
+        passwordLabel.snp.makeConstraints {
+            
+            $0.bottom.equalToSuperview().inset(454)
+            $0.leading.equalToSuperview().inset(40)
+            
+        }
+    }
+    
+    private lazy var passwordView: UIView = {
+       
+        let view = UIView()
+        view.backgroundColor = .darkGray
+        view.layer.cornerRadius = 5
+        view.layer.borderWidth = 1
+        
+        return view
+    }()
+    
+    private lazy var loginButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(" 로그인 ", for: .normal)
+        button.backgroundColor = .black
+        button.layer.cornerRadius = 5
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.gray.cgColor
+        
+        return button
+    }()
+    
+        
+    private lazy var representButton: UIButton = {
+        let action = UIAction { _ in self.passwordTextField.isSecureTextEntry = false }
+        let button = UIButton(type: .custom, primaryAction: action)
+        button.setTitle("표시", for: .normal)
+        button.titleLabel?.textColor = .lightGray
+        button.setTitleColor(.lightGray, for: .normal)
+
+        return button
+    }()
+    
+ 
+    private lazy var resetPasswordtButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("비밀번호 재설정", for: .normal)
+        button.backgroundColor = .black
+        return button
+    }()
+    
+    private lazy var stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 18.0
+        stack.alignment = .fill
+        stack.distribution = .fillEqually
+        
+        [self.emailView, self.passwordView, self.loginButton].forEach { stack.addArrangedSubview($0) }
+        
+        return stack
+        
+    }()
+    
+    
+    //MARK: - Life cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .black
+        configure()
+    }
+
+    //MARK: - Helper
+
+    func configure(){
+        
+        view.addSubview(loginButton)
+        loginButton.snp.makeConstraints {
+            $0.width.equalTo(345)
+            $0.height.equalTo(48)
+            
+        }
+        [stackView].forEach{view.addSubview($0)}
+        
+        stackView.snp.makeConstraints{
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(250)
+            $0.centerX.equalToSuperview()
+            
+        }
+        view.addSubview(resetPasswordtButton)
+        resetPasswordtButton.snp.makeConstraints {
+            $0.height.equalTo(48)
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(stackView.snp.bottom).offset(10)
+            
+        }
+        
+        view.addSubview(representButton)
+        representButton.snp.makeConstraints {
+            $0.bottom.equalToSuperview().inset(435)
+            $0.trailing.equalToSuperview().inset(40)
+            
+        }
+        
+        view.addSubview(loginLabel)
+        loginLabel.snp.makeConstraints {
+            $0.bottom.equalToSuperview().inset(506)
+            $0.leading.equalToSuperview().inset(40)
+            
+        }
+        
+        view.addSubview(passwordLabel)
+        passwordLabel.snp.makeConstraints {
+            $0.bottom.equalToSuperview().inset(440)
+            $0.leading.equalToSuperview().inset(40)
+            
+        }
+        
+        view.addSubview(emailTextField)
+        emailTextField.snp.makeConstraints {
+            $0.width.equalTo(300)
+            $0.height.equalTo(48)
+            $0.bottom.equalToSuperview().inset(495)
+            $0.leading.equalToSuperview().inset(40)
+            
+        }
+        view.addSubview(passwordTextField)
+        passwordTextField.snp.makeConstraints {
+            $0.width.equalTo(270)
+            $0.height.equalTo(48)
+            $0.bottom.equalToSuperview().inset(429)
+            $0.leading.equalToSuperview().inset(40)
+            
+        }
+        
+        
+        
+    }
+    
+}
+
+    //MARK: - swiftUI
+
+struct MyViewController_PreViews: PreviewProvider {
+    static var previews: some View {
+        ViewController().toPreview() //원하는 VC를 여기다 입력하면 된다.
+    }
+}
+extension UIViewController {
+    private struct Preview: UIViewControllerRepresentable {
+            let viewController: UIViewController
+
+            func makeUIViewController(context: Context) -> UIViewController {
+                return viewController
+            }
+
+            func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+            }
+        }
+
+    func toPreview() -> some View {
+        Preview(viewController: self)
+    }
+}
+
+
